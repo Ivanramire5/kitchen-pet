@@ -21,11 +21,18 @@ public class MascotaMovimiento : MonoBehaviour
     void Update()
     {
         Vector3 direction = target.position - transform.position; // Calcula la dirección hacia el objetivo
-        transform.Translate(direction.normalized * movimientoSpeed * Time.deltaTime, Space.World); // Mueve la mascota hacia el objetivo
+        direction.y = 0; 
 
-        if(Vector3.Distance(transform.position, target.position) <= 2f) // Verifica si la mascota ha llegado al objetivo
+        if (direction != Vector3.zero)
         {
-            GetNextWaypoint(); // Obtiene el siguiente waypoint
+            Quaternion rotacionDestino = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDestino, Time.deltaTime * petStateMachine.velocidadGiro);
+        }
+        transform.Translate(direction.normalized * movimientoSpeed * Time.deltaTime, Space.World); 
+
+        if(Vector3.Distance(transform.position, target.position) <= 2f) 
+        {
+            GetNextWaypoint(); 
         }
     }
 
