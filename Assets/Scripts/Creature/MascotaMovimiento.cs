@@ -38,18 +38,20 @@ public class MascotaMovimiento : MonoBehaviour
 
     void GetNextWaypoint()
     {
-        if(waypointIndex >= Waypoints.waypoints.Length - 1) // Verifica si se ha llegado al último waypoint
+        if(waypointIndex >= Waypoints.waypoints.Length - 1) 
         {
             if (petStateMachine != null)
             {
-                petStateMachine.CambiarEstado(PetStateMachine.PetState.Pedido); // Cambia el estado de la mascota a Pedido
+                petStateMachine.CambiarEstado(PetStateMachine.PetState.Pedido); 
             }
-            return; // Sale del método para evitar errores de índice fuera de rango
+            // ¡EL SEGURO PARANOICO! Lo apagamos desde adentro también.
+            this.enabled = false; 
+            return; 
         }
         else
         {
-            waypointIndex++; // Incrementa el índice del waypoint
+            waypointIndex++; 
         }
-        target = Waypoints.waypoints[waypointIndex]; // Actualiza el objetivo al siguiente waypoint
+        target = Waypoints.waypoints[waypointIndex]; 
     }
 }

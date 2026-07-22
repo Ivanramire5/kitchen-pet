@@ -15,15 +15,29 @@ public class PetStateMachine : MonoBehaviour
 
     private Transform jugador;
     public float velocidadGiro = 5f; 
-    private PetState petState;
-    private MascotaMovimiento movimientoScript;
+    public PetState petState;
+    public MascotaMovimiento movimientoScript;
     private GameObject mirarAlJugador;
+
+    public PacienciaManager pacienciaScript;
+
+    [SerializeField]
+    public float tiempoParaPedir = 10f;
+    private float temporizadorPedido;
 
     void Start()
     {
         movimientoScript = GetComponent<MascotaMovimiento>();
 
-        CambiarEstado(PetState.Moving);
+        if (pacienciaScript != null)
+        {
+            pacienciaScript.enabled = false; 
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el componente PacienciaManager en el objeto.");
+        }
+
         mirarAlJugador = GameObject.FindGameObjectWithTag("Player");
 
         if(mirarAlJugador != null)
@@ -57,7 +71,16 @@ public class PetStateMachine : MonoBehaviour
                     Quaternion rotacionDestino = Quaternion.LookRotation(direccionAlJugador);
 
                     transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDestino, Time.deltaTime * velocidadGiro);
-                }
+                } 
+            }
+            temporizadorPedido -= Time.deltaTime;
+
+            Debug.Log("Reloj de Pedido: " + temporizadorPedido);
+
+            if (temporizadorPedido <= 0)
+            {
+                // ¡Pasamos al estado de esperar la comida!
+                CambiarEstado(PetState.Paciencia); 
             }
             break;
         }
@@ -69,15 +92,31 @@ public class PetStateMachine : MonoBehaviour
 
         switch (petState)
         {
-
             case PetState.Moving:
                 movimientoScript.enabled = true; 
+                
+                // El blindaje: "Si encontré el script al inicio, apágalo."
+                if (pacienciaScript != null)
+                {
+                    pacienciaScript.enabled = false; 
+                }
                 break;
 
             case PetState.Pedido:
-
-            case PetState.Idle:
                 movimientoScript.enabled = false; 
+                if (pacienciaScript != null) pacienciaScript.enabled = false; 
+                
+                temporizadorPedido = tiempoParaPedir; 
+                break;
+
+            case PetState.Paciencia: 
+                movimientoScript.enabled = false; 
+                
+                // Lo mismo aquí al encenderlo
+                if (pacienciaScript != null)
+                {
+                    pacienciaScript.enabled = true; 
+                }
                 break;
         }
     }
