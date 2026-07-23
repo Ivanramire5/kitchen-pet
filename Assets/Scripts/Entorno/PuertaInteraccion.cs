@@ -1,38 +1,57 @@
 using System.Collections;
-using Unity.VisualScripting;
+using TMPro; // Cambia a 'using UnityEngine.UI;' si no usas TextMeshPro
 using UnityEngine;
 
 public class PuertaInteraccion : MonoBehaviour
 {   
-    [SerializeField] 
-    public float anguloApertura = 90f; // Ángulo de apertura de la puerta
-    [SerializeField]
-    public float velocidadApertura = 2f; // Velocidad de apertura de la puerta
-    private bool puertaAbierta = false; // Estado de la puerta
-    private Quaternion rotacionDeCerrado; // Rotación de la puerta cuando se cierra
-    private Quaternion rotacionDeAbierto; // Rotación de la puerta cuando se abre
+    [Header("Configuración de Animación")]
+    [SerializeField] public float anguloApertura = 90f;
+    [SerializeField] public float velocidadApertura = 2f;
+    
+    [Header("Configuración de UI e Interacción")]
+    public GameObject mensajeUI; // Arrastra tu TextoInteraccion del Canvas
+    public string textoAbrir = "[E] Abrir Puerta";
+    public string textoCerrar = "[E] Cerrar Puerta";
+
+    private bool puertaAbierta = false;
+    private bool jugadorCerca = false;
+    private Quaternion rotacionDeCerrado;
+    private Quaternion rotacionDeAbierto;
     private Coroutine currentCoroutine;
+    private TextMeshProUGUI textoComponente;
 
     void Start()
     {
         rotacionDeCerrado = transform.rotation;
         rotacionDeAbierto = Quaternion.Euler(transform.eulerAngles + new Vector3(0, anguloApertura, 0));
+
+        if (mensajeUI != null)
+        {
+            textoComponente = mensajeUI.GetComponent<TextMeshProUGUI>();
+            mensajeUI.SetActive(false); // Ocultamos el cartel al iniciar
+        }
     }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        // Solo responde a la tecla 'E' si el jugador está dentro del Trigger
+        if (jugadorCerca && Input.GetKeyDown(KeyCode.E))
         {
-            if(currentCoroutine != null)
+            if (currentCoroutine != null)
             {
                 StopCoroutine(currentCoroutine);
             }
             currentCoroutine = StartCoroutine(AnimarPuerta());
         }
     }
+
     private IEnumerator AnimarPuerta()
     {
         Quaternion targetRotation = puertaAbierta ? rotacionDeCerrado : rotacionDeAbierto;
         puertaAbierta = !puertaAbierta;
+
+        // Actualizamos el texto dinámicamente según si la puerta se está abriendo o cerrando
+        ActualizarTextoUI();
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
         {
@@ -40,6 +59,42 @@ public class PuertaInteraccion : MonoBehaviour
             yield return null;
         }
 
-        transform.rotation = targetRotation; // Asegura que la rotación final sea exacta
+        transform.rotation = targetRotation;
+    }
+
+    // --- DETECCIÓN DE JUGADOR Y CONTROL DE UI ---
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            jugadorCerca = true;
+            if (mensajeUI != null)
+            {
+                ActualizarTextoUI();
+                mensajeUI.SetActive(true); // Mostramos el cartel
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            jugadorCerca = false;
+            if (mensajeUI != null)
+            {
+                mensajeUI.SetActive(false); // Ocultamos el cartel al alejarnos
+            }
+        }
+    }
+
+    private void ActualizarTextoUI()
+    {
+        if (textoComponente != null)
+        {
+            // Muestra "Cerrar" si la puerta ya está abierta, o "Abrir" si está cerrada
+            textoComponente.text = puertaAbierta ? textoCerrar : textoAbrir;
+        }
     }
 }
