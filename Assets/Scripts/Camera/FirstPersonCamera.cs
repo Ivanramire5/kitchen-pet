@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-   [Header("Mouse Settings")]
+    [Header("Mouse Settings")]
     [SerializeField] private float mouseSensitivity = 200f;
 
     [Header("References")]
@@ -12,7 +12,7 @@ public class FirstPersonCamera : MonoBehaviour
 
     void Start()
     {
-        // Bloquear el cursor en el centro de la pantalla y ocultarlo
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

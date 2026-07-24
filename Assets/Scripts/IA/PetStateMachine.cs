@@ -1,4 +1,5 @@
 using UnityEngine;
+using Unity.Cinemachine;
 public class PetStateMachine : MonoBehaviour
 {
     
@@ -24,6 +25,9 @@ public class PetStateMachine : MonoBehaviour
     [SerializeField]
     public float tiempoParaPedir = 10f;
     private float temporizadorPedido;
+
+    [Header("Sistema de Cámaras")]
+    public CinemachineCamera camaraMostrador;
 
     void Start()
     {
@@ -104,6 +108,12 @@ public class PetStateMachine : MonoBehaviour
 
             case PetState.Pedido:
                 movimientoScript.enabled = false; 
+
+                if(camaraMostrador != null)
+                {
+                    camaraMostrador.Priority = 20;
+                }
+
                 if (pacienciaScript != null) pacienciaScript.enabled = false; 
                 
                 temporizadorPedido = tiempoParaPedir; 
@@ -111,6 +121,11 @@ public class PetStateMachine : MonoBehaviour
 
             case PetState.Paciencia: 
                 movimientoScript.enabled = false; 
+
+                if(camaraMostrador != null)
+                {
+                    camaraMostrador.Priority = 10;
+                }
                 
                 // Lo mismo aquí al encenderlo
                 if (pacienciaScript != null)
