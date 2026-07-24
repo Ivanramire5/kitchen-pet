@@ -1,8 +1,8 @@
 using UnityEngine;
 using Unity.Cinemachine;
+
 public class PetStateMachine : MonoBehaviour
 {
-    
     public enum PetState
     {
         Idle,
@@ -29,6 +29,10 @@ public class PetStateMachine : MonoBehaviour
     [Header("Sistema de Cámaras")]
     public CinemachineCamera camaraMostrador;
 
+    [Header("Conexión con la Interfaz del Ticket")]
+    public OrderDialogue controladorUI; 
+    public Sprite miSpriteHamburguesa;
+
     void Start()
     {
         movimientoScript = GetComponent<MascotaMovimiento>();
@@ -52,6 +56,7 @@ public class PetStateMachine : MonoBehaviour
         {
             Debug.LogWarning("No se encontró el objeto con la etiqueta 'Player'. Asegúrate de que exista en la escena.");
         }
+        
         CambiarEstado(PetState.Moving);
     }
 
@@ -71,19 +76,17 @@ public class PetStateMachine : MonoBehaviour
                 // Evitamos un error matemático si la mascota está exactamente en el centro del jugador
                 if (direccionAlJugador != Vector3.zero)
                 {
-
                     Quaternion rotacionDestino = Quaternion.LookRotation(direccionAlJugador);
-
                     transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDestino, Time.deltaTime * velocidadGiro);
                 } 
             }
+            
+            // Reloj de pedido original
             temporizadorPedido -= Time.deltaTime;
 
-            Debug.Log("Reloj de Pedido: " + temporizadorPedido);
-
-            if (temporizadorPedido <= 0)
+            // ¡EL CAMBIO CLAVE!: Pasamos a paciencia si el jugador presiona 'E' O si el tiempo se acaba
+            if (Input.GetKeyDown(KeyCode.E) || temporizadorPedido <= 0)
             {
-                // ¡Pasamos al estado de esperar la comida!
                 CambiarEstado(PetState.Paciencia); 
             }
             break;
@@ -99,7 +102,6 @@ public class PetStateMachine : MonoBehaviour
             case PetState.Moving:
                 movimientoScript.enabled = true; 
                 
-                // El blindaje: "Si encontré el script al inicio, apágalo."
                 if (pacienciaScript != null)
                 {
                     pacienciaScript.enabled = false; 
@@ -114,6 +116,12 @@ public class PetStateMachine : MonoBehaviour
                     camaraMostrador.Priority = 20;
                 }
 
+                // Encendemos el Ticket Visualmente
+                if (controladorUI != null)
+                {
+                    controladorUI.MostrarTicket(miSpriteHamburguesa, "Hamburguesa", "Punto: Bien cocida");
+                }
+
                 if (pacienciaScript != null) pacienciaScript.enabled = false; 
                 
                 temporizadorPedido = tiempoParaPedir; 
@@ -126,11 +134,16 @@ public class PetStateMachine : MonoBehaviour
                 {
                     camaraMostrador.Priority = 10;
                 }
+
+                // Apagamos el Ticket Visualmente
+                if (controladorUI != null)
+                {
+                    controladorUI.OcultarTicket();
+                }
                 
-                // Lo mismo aquí al encenderlo
                 if (pacienciaScript != null)
                 {
-                    pacienciaScript.enabled = true; 
+                    pacienciaScript.enabled = true; // ¡Aquí arranca tu barra de paciencia!
                 }
                 break;
         }
