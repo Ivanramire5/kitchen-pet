@@ -32,18 +32,21 @@ public class PetStateMachine : MonoBehaviour
     [Header("Conexión con la Interfaz del Ticket")]
     public OrderDialogue controladorUI; 
     public Sprite miSpriteHamburguesa;
+    
+    [Header("Interacción del Jugador")]
+    public GameObject textoAccionPedido; // <-- AQUÍ ARRASTRARÁS TU TEXTO DE "PRESIONAR E"
+    private bool viendoTicket = false;   // <-- Variable interna para saber en qué fase estamos
 
     void Start()
     {
         movimientoScript = GetComponent<MascotaMovimiento>();
 
+        // Nos aseguramos de que el texto empiece apagado al iniciar el juego
+        if (textoAccionPedido != null) textoAccionPedido.SetActive(false);
+
         if (pacienciaScript != null)
         {
             pacienciaScript.enabled = false; 
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el componente PacienciaManager en el objeto.");
         }
 
         mirarAlJugador = GameObject.FindGameObjectWithTag("Player");
@@ -51,10 +54,6 @@ public class PetStateMachine : MonoBehaviour
         if(mirarAlJugador != null)
         {
             jugador = mirarAlJugador.transform;
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el objeto con la etiqueta 'Player'. Asegúrate de que exista en la escena.");
         }
         
         CambiarEstado(PetState.Moving);
@@ -68,12 +67,9 @@ public class PetStateMachine : MonoBehaviour
 
             if (jugador != null)
             {
-                //Calculamos la dirección (Destino - Origen)
                 Vector3 direccionAlJugador = transform.position - jugador.position;
-                
                 direccionAlJugador.y = 0; 
 
-                // Evitamos un error matemático si la mascota está exactamente en el centro del jugador
                 if (direccionAlJugador != Vector3.zero)
                 {
                     Quaternion rotacionDestino = Quaternion.LookRotation(direccionAlJugador);
@@ -81,13 +77,32 @@ public class PetStateMachine : MonoBehaviour
                 } 
             }
             
-            // Reloj de pedido original
             temporizadorPedido -= Time.deltaTime;
 
-            // ¡EL CAMBIO CLAVE!: Pasamos a paciencia si el jugador presiona 'E' O si el tiempo se acaba
-            if (Input.GetKeyDown(KeyCode.E) || temporizadorPedido <= 0)
+            // LÓGICA DE INTERACCIÓN DE 2 PASOS
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                CambiarEstado(PetState.Paciencia); 
+                if (!viendoTicket)
+                {
+                    // PRIMER TOQUE DE 'E': El jugador decide atender al cliente
+                    viendoTicket = true;
+                    
+                    if (textoAccionPedido != null) textoAccionPedido.SetActive(false); // Apagamos el aviso
+                    
+                    if (camaraMostrador != null) camaraMostrador.Priority = 20; // Hacemos Zoom al mostrador
+                    
+                    if (controladorUI != null) controladorUI.MostrarTicket(miSpriteHamburguesa, "Hamburguesa", "Punto: Bien cocida"); // Mostramos la UI
+                }
+                else
+                {
+                    // SEGUNDO TOQUE DE 'E': El jugador acepta el pedido y se va a cocinar
+                    CambiarEstado(PetState.Paciencia); 
+                }
+            }
+            else if (temporizadorPedido <= 0)
+            {
+                // Si el tiempo se acaba en cualquiera de las dos fases, pasa a paciencia automáticamente
+                CambiarEstado(PetState.Paciencia);
             }
             break;
         }
@@ -102,25 +117,16 @@ public class PetStateMachine : MonoBehaviour
             case PetState.Moving:
                 movimientoScript.enabled = true; 
                 
-                if (pacienciaScript != null)
-                {
-                    pacienciaScript.enabled = false; 
-                }
+                if (pacienciaScript != null) pacienciaScript.enabled = false; 
                 break;
 
             case PetState.Pedido:
                 movimientoScript.enabled = false; 
-
-                if(camaraMostrador != null)
-                {
-                    camaraMostrador.Priority = 20;
-                }
-
-                // Encendemos el Ticket Visualmente
-                if (controladorUI != null)
-                {
-                    controladorUI.MostrarTicket(miSpriteHamburguesa, "Hamburguesa", "Punto: Bien cocida");
-                }
+                
+                viendoTicket = false; // Reiniciamos la variable
+                
+                // ENCENDEMOS EL TEXTO DE ACCIÓN (pero NO la cámara ni el ticket todavía)
+                if (textoAccionPedido != null) textoAccionPedido.SetActive(true);
 
                 if (pacienciaScript != null) pacienciaScript.enabled = false; 
                 
@@ -129,22 +135,18 @@ public class PetStateMachine : MonoBehaviour
 
             case PetState.Paciencia: 
                 movimientoScript.enabled = false; 
+                
+                // Por seguridad, nos aseguramos de que el texto de acción quede apagado
+                if (textoAccionPedido != null) textoAccionPedido.SetActive(false);
 
-                if(camaraMostrador != null)
-                {
-                    camaraMostrador.Priority = 10;
-                }
+                // Regresamos la cámara
+                if(camaraMostrador != null) camaraMostrador.Priority = 10;
 
                 // Apagamos el Ticket Visualmente
-                if (controladorUI != null)
-                {
-                    controladorUI.OcultarTicket();
-                }
+                if (controladorUI != null) controladorUI.OcultarTicket();
                 
-                if (pacienciaScript != null)
-                {
-                    pacienciaScript.enabled = true; // ¡Aquí arranca tu barra de paciencia!
-                }
+                // Arranca la barra de paciencia
+                if (pacienciaScript != null) pacienciaScript.enabled = true; 
                 break;
         }
     }
