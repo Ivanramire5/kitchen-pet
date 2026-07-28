@@ -34,8 +34,9 @@ public class PetStateMachine : MonoBehaviour
     public Sprite miSpriteHamburguesa;
     
     [Header("Interacción del Jugador")]
-    public GameObject textoAccionPedido; // <-- AQUÍ ARRASTRARÁS TU TEXTO DE "PRESIONAR E"
-    private bool viendoTicket = false;   // <-- Variable interna para saber en qué fase estamos
+    public GameObject textoAccionPedido; 
+    private bool viendoTicket = false; 
+    public bool jugadorEnZona = false;
 
     void Start()
     {
@@ -77,10 +78,10 @@ public class PetStateMachine : MonoBehaviour
                 } 
             }
             
-            temporizadorPedido -= Time.deltaTime;
+            
 
-            // LÓGICA DE INTERACCIÓN DE 2 PASOS
-            if (Input.GetKeyDown(KeyCode.E))
+            // Esta es la logica que hace que el jugador pueda tomar el pedido de la mascota. Se divide en dos fases: la primera vez que presiona 'E' y la segunda vez.
+            if (Input.GetKeyDown(KeyCode.E) && jugadorEnZona)
             {
                 if (!viendoTicket)
                 {
@@ -99,11 +100,7 @@ public class PetStateMachine : MonoBehaviour
                     CambiarEstado(PetState.Paciencia); 
                 }
             }
-            else if (temporizadorPedido <= 0)
-            {
-                // Si el tiempo se acaba en cualquiera de las dos fases, pasa a paciencia automáticamente
-                CambiarEstado(PetState.Paciencia);
-            }
+            
             break;
         }
     }
@@ -122,15 +119,20 @@ public class PetStateMachine : MonoBehaviour
 
             case PetState.Pedido:
                 movimientoScript.enabled = false; 
-                
                 viendoTicket = false; // Reiniciamos la variable
                 
-                // ENCENDEMOS EL TEXTO DE ACCIÓN (pero NO la cámara ni el ticket todavía)
-                if (textoAccionPedido != null) textoAccionPedido.SetActive(true);
+                if (jugadorEnZona && textoAccionPedido != null) 
+                {
+                    textoAccionPedido.SetActive(true);
+                }
+                else if (textoAccionPedido != null)
+                {
+                    textoAccionPedido.SetActive(false); // Por las dudas, lo mantenemos apagado
+                }
+
 
                 if (pacienciaScript != null) pacienciaScript.enabled = false; 
-                
-                temporizadorPedido = tiempoParaPedir; 
+                temporizadorPedido = tiempoParaPedir;
                 break;
 
             case PetState.Paciencia: 
@@ -148,6 +150,27 @@ public class PetStateMachine : MonoBehaviour
                 // Arranca la barra de paciencia
                 if (pacienciaScript != null) pacienciaScript.enabled = true; 
                 break;
+        }
+    }
+
+    public void EntrarZonaMostrador()
+    {
+        jugadorEnZona = true;
+
+        
+        if (petState == PetState.Pedido && !viendoTicket && textoAccionPedido != null)
+        {
+            textoAccionPedido.SetActive(true);
+        }
+    }
+
+    public void SalirZonaMostrador()
+    {
+        jugadorEnZona = false;
+
+        if (textoAccionPedido != null)
+        {
+            textoAccionPedido.SetActive(false);
         }
     }
 }
