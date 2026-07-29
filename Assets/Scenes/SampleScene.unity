@@ -490,11 +490,13 @@ GameObject:
   - component: {fileID: 288404989}
   - component: {fileID: 288404988}
   - component: {fileID: 288404987}
-  - component: {fileID: 288404986}
+  - component: {fileID: 288404990}
   - component: {fileID: 288404985}
+  - component: {fileID: 288404991}
+  - component: {fileID: 288404992}
   m_Layer: 0
   m_Name: Ketchup
-  m_TagString: Untagged
+  m_TagString: canPickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -511,31 +513,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8101dd8a5cffc7f45983c8cbc4aa5f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoteAderezo
-  indiceDeEstePote: 0
+  indiceAderezo: 0
   sistemaPrincipal: {fileID: 0}
---- !u!136 &288404986
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288404984}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &288404987
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -608,6 +587,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &288404990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288404984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35cfaf62bfa0f0b4b9fdfe9ca0a7f90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjetoAgarrable
+--- !u!54 &288404991
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288404984}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &288404992
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288404984}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5596436, y: 2.752957, z: 1.9590125}
+  m_Center: {x: 0.03400933, y: 0.37647802, z: -0.03385097}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,11 +2288,13 @@ GameObject:
   - component: {fileID: 809139368}
   - component: {fileID: 809139367}
   - component: {fileID: 809139366}
-  - component: {fileID: 809139365}
+  - component: {fileID: 809139369}
   - component: {fileID: 809139364}
+  - component: {fileID: 809139370}
+  - component: {fileID: 809139371}
   m_Layer: 0
   m_Name: Mayonesa
-  m_TagString: Untagged
+  m_TagString: canPickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2270,31 +2311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8101dd8a5cffc7f45983c8cbc4aa5f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoteAderezo
-  indiceDeEstePote: 1
+  indiceAderezo: 0
   sistemaPrincipal: {fileID: 0}
---- !u!136 &809139365
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809139363}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &809139366
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2361,12 +2379,72 @@ Transform:
   m_GameObject: {fileID: 809139363}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.15, y: 2.28, z: -20.08}
+  m_LocalPosition: {x: -15.15, y: 2.28, z: -20.07}
   m_LocalScale: {x: 0.21999998, y: 0.21999998, z: 0.21999998}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &809139369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809139363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35cfaf62bfa0f0b4b9fdfe9ca0a7f90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjetoAgarrable
+--- !u!54 &809139370
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809139363}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &809139371
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809139363}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5947001, y: 3.0488784, z: 1.7528535}
+  m_Center: {x: -0.042854592, y: 0.52443814, z: -0.0037800185}
 --- !u!1 &813575618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2993,7 +3071,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4190,10 +4268,11 @@ MonoBehaviour:
   listaAderezos:
   - nombre: Ketchup
     colorAderezo: {r: 1, g: 0, b: 0, a: 0}
-    "tama\xF1oPincel": 5
+    "tama\xF1oPincel": 3
   - nombre: Mayonesa
     colorAderezo: {r: 0.8792453, g: 0.8200094, b: 0.4761196, a: 0}
-    "tama\xF1oPincel": 5
+    "tama\xF1oPincel": 3
+  cursorManito: {fileID: 2800000, guid: 98b9b59cddc770f4d994663a03d866b3, type: 3}
 --- !u!4 &1708674505
 Transform:
   m_ObjectHideFlags: 0
@@ -4810,8 +4889,8 @@ Transform:
   m_GameObject: {fileID: 1795752581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.101, y: 2.219, z: -18.9396}
-  m_LocalScale: {x: 0.199602, y: 0.12118678, z: 0.79595333}
+  m_LocalPosition: {x: -14.275, y: 2.219, z: -19.167}
+  m_LocalScale: {x: 0.82323796, y: 0.25354698, z: 1.6652936}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -5578,6 +5657,51 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.99999994, y: 1.0000001, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2102559147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2102559149}
+  - component: {fileID: 2102559148}
+  m_Layer: 0
+  m_Name: ManoJugador
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2102559148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102559147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 947f9fb2326e3864891cdae3f34b9f99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgarreManager
+  objetoEnMano: {fileID: 0}
+--- !u!4 &2102559149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102559147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.48855, y: 6.00194, z: -21.79809}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5606,3 +5730,4 @@ SceneRoots:
   - {fileID: 809139368}
   - {fileID: 1708674505}
   - {fileID: 1795752585}
+  - {fileID: 2102559149}

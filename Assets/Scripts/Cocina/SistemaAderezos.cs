@@ -1,8 +1,10 @@
+
 using UnityEngine;
 
 /// <summary>
-/// Clase que gestiona el sistema de aderezos en la cocina.
+/// Estructura que representa un aderezo con su nombre, color y tamaño de pincel.
 /// </summary>
+
 [System.Serializable]
 public struct Aderezo
 {
@@ -10,8 +12,6 @@ public struct Aderezo
     public Color colorAderezo;
     [Range(1, 10)] 
     public int tamañoPincel;
-
-    
 }
 
 public class SistemaAderezos : MonoBehaviour
@@ -19,36 +19,85 @@ public class SistemaAderezos : MonoBehaviour
     [Header("Configuración de Aderezos")]
     public Aderezo[] listaAderezos;
     
-    // Usamos -1 para indicar que el jugador tiene las manos vacías
+    [Header("Cursores")]
+    [Tooltip("Arrastra aquí tu textura PNG de la manito")]
+    public Texture2D cursorManito;
+    
     private int indiceAderezoActual = -1; 
     private PoteAderezo poteFisicoActual = null;
 
-    private bool ignorarClickEsteFrame = false;
-
     void Update()
     {
-        // 1. DIBUJAR: Solo dibuja si tenemos un pote en la mano y hacemos Clic Izquierdo (0)
+        ActualizarFormaCursor();
+
+        // 1. DIBUJAR: Mantener Clic Izquierdo (0)
         if (indiceAderezoActual != -1 && Input.GetMouseButton(0)) 
         {
             DibujarAderezo();
         }
 
-        // 2. SOLTAR POTE: Si haces Clic Derecho (1)
-        if (Input.GetMouseButtonDown(1)) 
+        // 2. AGARRAR: Clic Derecho (1) solo si tenemos las manos vacías
+        if (Input.GetMouseButtonDown(1) && indiceAderezoActual == -1) 
         {
-            // Si lo acabamos de agarrar este frame, solo apagamos el escudo
-            if (ignorarClickEsteFrame)
+            IntentarAgarrarPote();
+        }
+
+        // 3. SOLTAR: Presionar la tecla 'F' solo si tenemos un pote en la mano
+        if (Input.GetKeyDown(KeyCode.F) && indiceAderezoActual != -1)
+        {
+            Debug.Log("<color=cyan>[DEBUG SOLTAR]</color> Soltaste el pote presionado 'F'.");
+            SoltarPote();
+        }
+    }
+
+    private void ActualizarFormaCursor()
+    {
+        if (indiceAderezoActual != -1)
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.transform.GetComponent<PoteAderezo>() != null && cursorManito != null)
             {
-                ignorarClickEsteFrame = false;
+                Cursor.SetCursor(cursorManito, Vector2.zero, CursorMode.Auto);
             }
-            else // Si ya lo teníamos de antes, lo soltamos normalmente
+            else
             {
-                SoltarPote();
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            }
+        }
+        else
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+    }
+
+    private void IntentarAgarrarPote()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            Debug.Log("<color=yellow>[DEBUG AGARRE]</color> El Clic Derecho golpeó a: <b>" + hit.transform.name + "</b>");
+
+            PoteAderezo poteTocado = hit.transform.GetComponent<PoteAderezo>();
+            
+            if (poteTocado != null)
+            {
+                SeleccionarPote(poteTocado.indiceAderezo, poteTocado);
+            }
+            else
+            {
+                Debug.LogWarning("<color=red>[DEBUG AGARRE]</color> El objeto " + hit.transform.name + " no es un PoteAderezo.");
             }
         }
     }
 
-    // Esta función es llamada por los potes físicos cuando les haces clic
     public void SeleccionarPote(int indice, PoteAderezo poteFisico)
     {
         if (poteFisicoActual != null) poteFisicoActual.Soltar();
@@ -57,13 +106,10 @@ public class SistemaAderezos : MonoBehaviour
         poteFisicoActual = poteFisico;
         poteFisicoActual.Agarrar(); 
         
-        // Activamos el escudo para no soltarlo inmediatamente
-        ignorarClickEsteFrame = true;
-        
-        Debug.Log("Agarraste el pote de: " + listaAderezos[indiceAderezoActual].nombre);
-    }   
+        Debug.Log("Agarraste el pote de: " + listaAderezos[indiceAderezoActual].nombre + ". ¡Presiona F para soltar!");
+    }
 
-    public void SoltarPote() // Recuerda que esto ocurre al hacer Clic Derecho
+    public void SoltarPote()
     {
         if (poteFisicoActual != null)
         {
@@ -72,22 +118,36 @@ public class SistemaAderezos : MonoBehaviour
         }
         
         indiceAderezoActual = -1;
-        Debug.Log("Soltaste el pote. Manos vacías.");
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        Debug.Log("Manos vacías.");
     }
 
     private void DibujarAderezo()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            // Solo pintamos si golpeamos la comida (puedes agregar un Tag "Comida" para ser más preciso)
+            // Ya no ignoramos silenciosamente: si golpea un pote, es porque su Collider sigue prendido
+            if (hit.transform.GetComponent<PoteAderezo>() != null)
+            {
+                Debug.LogWarning("<color=red>[DEBUG DIBUJO ERROR]</color> Estás apuntando a " + hit.transform.name + ". ¡Su Collider no se apagó al agarrarlo!");
+                return;
+            }
+
+            Debug.Log("<color=orange>[DEBUG DIBUJO]</color> El rayo golpea a: <b>" + hit.transform.name + "</b>");
+
             Renderer rend = hit.transform.GetComponent<Renderer>();
             
             if (rend != null && rend.material.mainTexture != null)
             {
                 Texture2D texturaBase = rend.material.mainTexture as Texture2D;
+
+                if (!texturaBase.isReadable)
+                {
+                    Debug.LogError("<color=red>[DEBUG DIBUJO ERROR]</color> La textura de " + hit.transform.name + " NO tiene marcado 'Read/Write Enabled' en Project.");
+                    return;
+                }
 
                 Vector2 pixelUV = hit.textureCoord;
                 pixelUV.x *= texturaBase.width;
@@ -104,6 +164,7 @@ public class SistemaAderezos : MonoBehaviour
                 }
 
                 texturaBase.Apply();
+                Debug.Log("<color=green>[DEBUG DIBUJO]</color> ¡Píxeles pintados sobre " + hit.transform.name + "!");
             }
         }
     }

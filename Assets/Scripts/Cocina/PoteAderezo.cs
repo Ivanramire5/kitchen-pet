@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class PoteAderezo : MonoBehaviour
 {
-    public int indiceDeEstePote;
+    public int indiceAderezo; // Este índice lo asignamos en el Inspector para cada pote
     public SistemaAderezos sistemaPrincipal;
     
     private Vector3 posicionOriginal;
@@ -26,7 +26,7 @@ public class PoteAderezo : MonoBehaviour
         {
             if (sistemaPrincipal != null && sistemaPrincipal.enabled && !estaAgarrado)
             {
-                sistemaPrincipal.SeleccionarPote(indiceDeEstePote, this);
+                sistemaPrincipal.SeleccionarPote(indiceAderezo, this);
             }
         }
     }
