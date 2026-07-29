@@ -1,8 +1,8 @@
-
 using UnityEngine;
 
 /// <summary>
 /// Estructura que representa un aderezo con su nombre, color y tamaño de pincel.
+/// Se utiliza en el SistemaAderezos para dibujar sobre la comida.
 /// </summary>
 
 [System.Serializable]
@@ -10,7 +10,7 @@ public struct Aderezo
 {
     public string nombre;
     public Color colorAderezo;
-    [Range(1, 10)] 
+    [Range(1, 15)] 
     public int tamañoPincel;
 }
 
@@ -20,32 +20,38 @@ public class SistemaAderezos : MonoBehaviour
     public Aderezo[] listaAderezos;
     
     [Header("Cursores")]
-    [Tooltip("Arrastra aquí tu textura PNG de la manito")]
     public Texture2D cursorManito;
     
     private int indiceAderezoActual = -1; 
     private PoteAderezo poteFisicoActual = null;
 
+    private Vector2 ultimoPixelUV = -Vector2.one;
+    private Renderer ultimoRendererPintado = null;
+
     void Update()
     {
         ActualizarFormaCursor();
 
-        // 1. DIBUJAR: Mantener Clic Izquierdo (0)
+        // 1. DIBUJAR: Clic Izquierdo (0) presionado SOLO si tenemos una botella en mano
         if (indiceAderezoActual != -1 && Input.GetMouseButton(0)) 
         {
-            DibujarAderezo();
+            DibujarAderezoLibre();
+        }
+        else
+        {
+            ultimoPixelUV = -Vector2.one;
+            ultimoRendererPintado = null;
         }
 
-        // 2. AGARRAR: Clic Derecho (1) solo si tenemos las manos vacías
+        // 2. AGARRAR: Clic Derecho (1) SOLO si tenemos las manos vacías
         if (Input.GetMouseButtonDown(1) && indiceAderezoActual == -1) 
         {
             IntentarAgarrarPote();
         }
 
-        // 3. SOLTAR: Presionar la tecla 'F' solo si tenemos un pote en la mano
+        // 3. SOLTAR: Tecla 'F' SOLO si tenemos una botella en mano
         if (Input.GetKeyDown(KeyCode.F) && indiceAderezoActual != -1)
         {
-            Debug.Log("<color=cyan>[DEBUG SOLTAR]</color> Soltaste el pote presionado 'F'.");
             SoltarPote();
         }
     }
@@ -62,7 +68,7 @@ public class SistemaAderezos : MonoBehaviour
         
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            if (hit.transform.GetComponent<PoteAderezo>() != null && cursorManito != null)
+            if ((hit.transform.CompareTag("Aderezos") || hit.transform.GetComponentInParent<PoteAderezo>() != null) && cursorManito != null)
             {
                 Cursor.SetCursor(cursorManito, Vector2.zero, CursorMode.Auto);
             }
@@ -83,17 +89,13 @@ public class SistemaAderezos : MonoBehaviour
         
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log("<color=yellow>[DEBUG AGARRE]</color> El Clic Derecho golpeó a: <b>" + hit.transform.name + "</b>");
-
             PoteAderezo poteTocado = hit.transform.GetComponent<PoteAderezo>();
+            if (poteTocado == null) poteTocado = hit.transform.GetComponentInParent<PoteAderezo>();
+            if (poteTocado == null) poteTocado = hit.transform.GetComponentInChildren<PoteAderezo>();
             
             if (poteTocado != null)
             {
                 SeleccionarPote(poteTocado.indiceAderezo, poteTocado);
-            }
-            else
-            {
-                Debug.LogWarning("<color=red>[DEBUG AGARRE]</color> El objeto " + hit.transform.name + " no es un PoteAderezo.");
             }
         }
     }
@@ -106,7 +108,7 @@ public class SistemaAderezos : MonoBehaviour
         poteFisicoActual = poteFisico;
         poteFisicoActual.Agarrar(); 
         
-        Debug.Log("Agarraste el pote de: " + listaAderezos[indiceAderezoActual].nombre + ". ¡Presiona F para soltar!");
+        Debug.Log("<color=green>[SISTEMA]</color> Agarraste: " + listaAderezos[indiceAderezoActual].nombre + " | ¡Presiona F para soltar!");
     }
 
     public void SoltarPote()
@@ -119,52 +121,96 @@ public class SistemaAderezos : MonoBehaviour
         
         indiceAderezoActual = -1;
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        Debug.Log("Manos vacías.");
+        Debug.Log("<color=cyan>[SISTEMA]</color> Pote soltado. Manos vacías.");
     }
 
-    private void DibujarAderezo()
+    private void DibujarAderezoLibre()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            // Ya no ignoramos silenciosamente: si golpea un pote, es porque su Collider sigue prendido
-            if (hit.transform.GetComponent<PoteAderezo>() != null)
-            {
-                Debug.LogWarning("<color=red>[DEBUG DIBUJO ERROR]</color> Estás apuntando a " + hit.transform.name + ". ¡Su Collider no se apagó al agarrarlo!");
-                return;
-            }
-
-            Debug.Log("<color=orange>[DEBUG DIBUJO]</color> El rayo golpea a: <b>" + hit.transform.name + "</b>");
+            // Ignorar la botella de salsa por si el rayo la roza
+            if (hit.transform.CompareTag("Aderezos") || hit.transform.GetComponentInParent<PoteAderezo>() != null) return;
 
             Renderer rend = hit.transform.GetComponent<Renderer>();
             
             if (rend != null && rend.material.mainTexture != null)
             {
-                Texture2D texturaBase = rend.material.mainTexture as Texture2D;
-
-                if (!texturaBase.isReadable)
+                // Verificamos si el colisionador es compatible con coordenadas UV
+                if (!(hit.collider is MeshCollider))
                 {
-                    Debug.LogError("<color=red>[DEBUG DIBUJO ERROR]</color> La textura de " + hit.transform.name + " NO tiene marcado 'Read/Write Enabled' en Project.");
+                    Debug.LogWarning("<color=magenta>[DEBUG DIBUJO]</color> Estás intentando pintar sobre '" + hit.transform.name + "' pero no tiene un Mesh Collider. ¡El SetPixel necesita un MeshCollider para calcular las UVs!");
                     return;
                 }
 
-                Vector2 pixelUV = hit.textureCoord;
-                pixelUV.x *= texturaBase.width;
-                pixelUV.y *= texturaBase.height;
+                Texture2D texturaBase = rend.material.mainTexture as Texture2D;
+
+                if (texturaBase.name != "TexturaClonada_Cocina")
+                {
+                    Texture2D texturaEditable = new Texture2D(texturaBase.width, texturaBase.height, TextureFormat.RGBA32, false);
+                    texturaEditable.name = "TexturaClonada_Cocina";
+                    
+                    RenderTexture rt = RenderTexture.GetTemporary(texturaBase.width, texturaBase.height);
+                    Graphics.Blit(texturaBase, rt);
+                    RenderTexture actualActiva = RenderTexture.active;
+                    RenderTexture.active = rt;
+                    texturaEditable.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+                    texturaEditable.Apply();
+                    RenderTexture.active = actualActiva;
+                    RenderTexture.ReleaseTemporary(rt);
+
+                    rend.material.mainTexture = texturaEditable;
+                    texturaBase = texturaEditable;
+                }
+
+                Vector2 pixelUVActual = hit.textureCoord;
+                pixelUVActual.x *= texturaBase.width;
+                pixelUVActual.y *= texturaBase.height;
 
                 Aderezo aderezoActual = listaAderezos[indiceAderezoActual];
 
-                for (int x = -aderezoActual.tamañoPincel; x <= aderezoActual.tamañoPincel; x++)
+                // Primer clic: Pintamos el punto inicial
+                if (ultimoPixelUV == -Vector2.one || ultimoRendererPintado != rend)
                 {
-                    for (int y = -aderezoActual.tamañoPincel; y <= aderezoActual.tamañoPincel; y++)
+                    PintarCirculo(texturaBase, (int)pixelUVActual.x, (int)pixelUVActual.y, aderezoActual.tamañoPincel, aderezoActual.colorAderezo);
+                }
+                else
+                {
+                    // Interpolación lineal fluida (3x densidad para no dejar huecos al mover el mouse rápido)
+                    float distancia = Vector2.Distance(ultimoPixelUV, pixelUVActual);
+                    int pasos = Mathf.CeilToInt(distancia * 3f);
+
+                    for (int i = 0; i <= pasos; i++)
                     {
-                        texturaBase.SetPixel((int)pixelUV.x + x, (int)pixelUV.y + y, aderezoActual.colorAderezo);
+                        float t = pasos == 0 ? 0f : (float)i / pasos;
+                        Vector2 puntoIntermedio = Vector2.Lerp(ultimoPixelUV, pixelUVActual, t);
+                        PintarCirculo(texturaBase, (int)puntoIntermedio.x, (int)puntoIntermedio.y, aderezoActual.tamañoPincel, aderezoActual.colorAderezo);
                     }
                 }
 
+                ultimoPixelUV = pixelUVActual;
+                ultimoRendererPintado = rend;
+
                 texturaBase.Apply();
-                Debug.Log("<color=green>[DEBUG DIBUJO]</color> ¡Píxeles pintados sobre " + hit.transform.name + "!");
+            }
+            else
+            {
+                Debug.LogWarning("<color=magenta>[DEBUG DIBUJO]</color> El rayo golpea a '" + hit.transform.name + "', pero no tiene Renderer o textura principal.");
+            }
+        }
+    }
+
+    private void PintarCirculo(Texture2D textura, int centroX, int centroY, int radio, Color color)
+    {
+        for (int x = -radio; x <= radio; x++)
+        {
+            for (int y = -radio; y <= radio; y++)
+            {
+                if (x * x + y * y <= radio * radio)
+                {
+                    textura.SetPixel(centroX + x, centroY + y, color);
+                }
             }
         }
     }

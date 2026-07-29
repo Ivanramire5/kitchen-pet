@@ -6,7 +6,9 @@ TagManager:
   tags:
   - VentanillaPedido
   - Interactuable
-  - canPickUp
+  - Mesada
+  - Comida
+  - Aderezos
   layers:
   - Default
   - TransparentFX
