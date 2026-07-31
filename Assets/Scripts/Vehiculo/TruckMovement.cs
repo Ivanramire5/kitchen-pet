@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,6 +35,12 @@ public class TruckMovement : MonoBehaviour
     public UnityEvent AlLlegarAEntrega;
     public UnityEvent AlTerminarEntrega;
     public float temporizadorEntrega = 0f;
+
+    [Header("Reparto de paquetes")]
+    public GameObject prefabCajaReparto;
+    public Transform puntoDescarga;
+    public List<string> pedidoActual = new List<string> { "ingrPan", "ingrSalchicha", "ingrMostaza" };
+
 
     void Update()
     {
@@ -80,9 +87,19 @@ public class TruckMovement : MonoBehaviour
         estadoActual = TruckState.Entregandose;
         temporizadorEntrega = velocidadEntrega;
         
-        Debug.Log("<color=cyan>[DELIVERY]</color> ¡Camión llegó! Descargando comida...");
+        Debug.Log("<color=cyan>[DELIVERY]</color> ¡Camión llegó! Descargando pedido");
         
-        // Disparamos el evento (para spawnear cajas de comida, hacer sonar una bocina, etc.)
+        if (prefabCajaReparto != null && puntoDescarga != null)
+        {
+            GameObject nuevaCaja = Instantiate(prefabCajaReparto, puntoDescarga.position, puntoDescarga.rotation);
+            
+            // 2. LE INYECTAMOS LOS DATOS DE NUESTRA BASE DE DATOS / PEDIDO
+            CajaReparto scriptCaja = nuevaCaja.GetComponent<CajaReparto>();
+            if (scriptCaja != null)
+            {
+                scriptCaja.CargarPedido(pedidoActual);
+            }
+        }
         AlLlegarAEntrega?.Invoke();
     }
     private void TerminarEntregaYSalir()
