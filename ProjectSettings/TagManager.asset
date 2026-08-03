@@ -9,6 +9,7 @@ TagManager:
   - Mesada
   - Comida
   - Aderezos
+  - capaAgarrable
   layers:
   - Default
   - TransparentFX
