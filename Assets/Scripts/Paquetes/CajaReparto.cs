@@ -9,8 +9,22 @@ public class CajaReparto : MonoBehaviour
 {
     [Header("Contenido de la caja")]
 
+    public bool cajaAbierta = false; //Indica si la caja esta abierta o no. Esto es para que no se pueda abrir dos veces la misma caja
+
     //Aca guardamos todos los IDs de los items
     public List<string> idsContenido = new List<string>();
+
+    void Update()
+{
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+        Debug.Log("¡Tecla E detectada por la caja!"); 
+        if (!cajaAbierta)
+        {
+            AbrirCaja();
+        }
+    }
+}
 
     public void CargarPedido(List<string> nuevosItems)
     {

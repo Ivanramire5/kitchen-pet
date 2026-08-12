@@ -1,5 +1,7 @@
 using UnityEngine;
-
+/// <summary>
+/// Clase que representa los datos de un alimento en el juego. Se utiliza para almacenar información relevante sobre cada alimento, como su ID, nombre, icono, prefab 3D, propiedades de cocina y economía.
+/// </summary>
 [CreateAssetMenu(fileName = "Nuevo Alimento", menuName = "Cocina/Alimentos de Base de Datos")]
 public class FoodData : ScriptableObject
 {

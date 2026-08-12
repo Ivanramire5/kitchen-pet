@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase que representa la base de datos de alimentos en el juego. Se encarga de almacenar y gestionar todos los alimentos disponibles, permitiendo acceder a ellos mediante su ID único. Esta clase utiliza un patrón Singleton para facilitar el acceso desde cualquier parte del juego.
+/// </summary>
 public class BaseDeDatosComida : MonoBehaviour
 {
     public static BaseDeDatosComida Instance;
