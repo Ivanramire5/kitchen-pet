@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PoteAderezo : MonoBehaviour
 {
-    [Tooltip("0 = Ketchup, 1 = Mostaza, 2 = Mayonesa, etc.")]
+    [Tooltip("Aderezos aqui")]
     public int indiceAderezo;
 
     private ObjetoAgarrable miAgarrable;

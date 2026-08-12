@@ -31,5 +31,4 @@ public class FoodData : ScriptableObject
     [Tooltip("Ganancia de experiencia o puntaje al procesar este ítem")]
     [Range(0, 100)] 
     public int puntosDeReputacion;
-
 }

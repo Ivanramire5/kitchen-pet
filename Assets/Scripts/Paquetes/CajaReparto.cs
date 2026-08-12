@@ -1,49 +1,82 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// Script encargado del contenido de las cajas
-/// </summary>
 public class CajaReparto : MonoBehaviour
 {
     [Header("Contenido de la caja")]
+    public bool cajaAbierta = false;
+    public List<FoodData> contenidoCaja = new List<FoodData>();
 
-    public bool cajaAbierta = false; //Indica si la caja esta abierta o no. Esto es para que no se pueda abrir dos veces la misma caja
-
-    //Aca guardamos todos los IDs de los items
-    public List<string> idsContenido = new List<string>();
-
-    void Update()
-{
-    if (Input.GetKeyDown(KeyCode.E))
+    private void Update()
     {
-        Debug.Log("¡Tecla E detectada por la caja!"); 
-        if (!cajaAbierta)
+        if (Input.GetKeyDown(KeyCode.E) && !cajaAbierta)
         {
             AbrirCaja();
         }
     }
-}
 
-    public void CargarPedido(List<string> nuevosItems)
+    public void CargarPedido(List<string> idsPedido)
     {
-        idsContenido = nuevosItems;
-        Debug.Log("<color=yellow>[CAJA]</color> La caja fue cargada con" + idsContenido.Count + "items.");
+        contenidoCaja.Clear();
+
+        if (idsPedido == null)
+        {
+            Debug.LogWarning("[CAJA] La lista de IDs es nula.");
+            return;
+        }
+
+        if (BaseDeDatosComida.Instance == null)
+        {
+            Debug.LogError("[CAJA] No hay BaseDeDatosComida en la escena.");
+            return;
+        }
+
+        foreach (string idItem in idsPedido)
+        {
+            if (string.IsNullOrEmpty(idItem))
+                continue;
+
+            if (BaseDeDatosComida.Instance.TryGetAlimentoPorID(idItem, out FoodData alimento))
+            {
+                contenidoCaja.Add(alimento);
+                Debug.Log("[CAJA] Encontrado: " + alimento.alimentoName + " | ID: " + alimento.alimentoID);
+            }
+            else
+            {
+                Debug.LogWarning("[CAJA] No se encontró el alimento con ID: " + idItem);
+            }
+        }
     }
+
     public void AbrirCaja()
     {
-        Debug.Log("<color=green>[CAJA]</color> Abriendo caja de entrega...");
+        if (cajaAbierta)
+            return;
 
-        foreach (string idItem in idsContenido)
+        if (contenidoCaja == null || contenidoCaja.Count == 0)
         {
-            //Aca se consulta la base de datos
-            //Se busca el item en una base de datos
-
-            Debug.Log("ID del item extraido" + idItem);
+            Debug.LogWarning("[CAJA] La caja está vacía.");
+            return;
         }
-        //Cuando se abre la caja esta desaparece dando mejor rendimiento
-        //Se le pueden colocar animaciones
+
+        cajaAbierta = true;
+
+        foreach (FoodData alimento in contenidoCaja)
+        {
+            if (alimento == null)
+                continue;
+
+            if (alimento.prefab3D != null)
+            {
+                Instantiate(alimento.prefab3D, transform.position + Vector3.up * 0.8f, Quaternion.identity);
+                Debug.Log("[CAJA] Spawn: " + alimento.alimentoName);
+            }
+            else
+            {
+                Debug.LogWarning("[CAJA] Este alimento no tiene prefab3D: " + alimento.alimentoName);
+            }
+        }
+
         Destroy(gameObject);
     }
 }

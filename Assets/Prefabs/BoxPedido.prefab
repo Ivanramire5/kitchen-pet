@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2910185997209093907}
   - component: {fileID: -3254976325102011712}
   - component: {fileID: -4441354164308189683}
-  - component: {fileID: 7170483010356716388}
   - component: {fileID: -7119425606185181087}
   m_Layer: 0
   m_Name: BoxPedido
@@ -158,19 +157,6 @@ MonoBehaviour:
   distanciaDeFlotacion: 1.5
   sePuedeLanzar: 1
   rb: {fileID: 0}
---- !u!114 &7170483010356716388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2506061618388183327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c219077c83bd1104493b75ddc59717d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IngredienteFisico
-  datos: {fileID: 0}
 --- !u!114 &-7119425606185181087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +170,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CajaReparto
   cajaAbierta: 0
-  idsContenido:
-  - Kebab
-  - Panchito
+  contenidoCaja:
+  - {fileID: 11400000, guid: 1349b2b17524dcc4a8d01dcb04e9ba6c, type: 2}
+  - {fileID: 11400000, guid: b979a5b982f245e48a9ea75c5eaaf1d2, type: 2}

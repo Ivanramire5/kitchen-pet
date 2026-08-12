@@ -39,7 +39,11 @@ public class TruckMovement : MonoBehaviour
     [Header("Reparto de paquetes")]
     public GameObject prefabCajaReparto;
     public Transform puntoDescarga;
-    public List<string> pedidoActual = new List<string> { "ingrPan", "ingrSalchicha", "ingrMostaza" };
+    public List<string> pedidoActual = new List<string>
+    {
+        "panchito_id",
+        "kebab_id",
+    };
 
 
     void Update()

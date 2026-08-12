@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14baa223301ec0749959ccfcf181df0f, type: 3}
   m_Name: Kebab
   m_EditorClassIdentifier: Assembly-CSharp::FoodData
-  alimentoID: 2
+  alimentoID: kebab_id
   alimentoName: Kebab
   iconoUI: {fileID: 21300000, guid: 577fd0f6888b90044bca087711545a2d, type: 3}
-  prefab3D: {fileID: 0}
+  prefab3D: {fileID: 5549950465477768670, guid: afabbf84c2f0a494585f04dbd3339f02, type: 3}
   sePuedeCocinar: 1
   tiempoCoccion: 15
   sePuedeCortar: 1

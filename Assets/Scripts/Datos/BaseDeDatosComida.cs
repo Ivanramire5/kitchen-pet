@@ -2,22 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Clase que representa la base de datos de alimentos en el juego. Se encarga de almacenar y gestionar todos los alimentos disponibles, permitiendo acceder a ellos mediante su ID único. Esta clase utiliza un patrón Singleton para facilitar el acceso desde cualquier parte del juego.
+/// Base de datos central de alimentos.
+/// Carga todos los FoodData del proyecto y los expone por key = alimentoID.
 /// </summary>
 public class BaseDeDatosComida : MonoBehaviour
 {
     public static BaseDeDatosComida Instance;
 
     [Header("Catalogo completo de alimento")]
-    [Tooltip("Arrastra aquí todos los ScriptableObjects creados en la carpeta Datos/Comida")]
+    [Tooltip("Arrastra aquí todos los ScriptableObjects FoodData que formen parte del juego.")]
     public FoodData[] catalogoComida;
 
-    //Usamos un diccionario para acceder a los alimentos por su ID sin sacrificar rendimientro
     private Dictionary<string, FoodData> diccionarioComida = new Dictionary<string, FoodData>();
 
-    void Awake()
+    private void Awake()
     {
-        //Usamos un Singleton para tener un acceso rapido desde cualquier script
         if (Instance == null)
         {
             Instance = this;
@@ -32,34 +31,36 @@ public class BaseDeDatosComida : MonoBehaviour
     private void InicializarDiccionario()
     {
         diccionarioComida.Clear();
-        
+
         foreach (FoodData alimento in catalogoComida)
         {
-            if (alimento != null && !string.IsNullOrEmpty(alimento.alimentoID))
+            if (alimento == null || string.IsNullOrEmpty(alimento.alimentoID))
+                continue;
+
+            if (!diccionarioComida.ContainsKey(alimento.alimentoID))
             {
-                if (!diccionarioComida.ContainsKey(alimento.alimentoID))
-                {
-                    diccionarioComida.Add(alimento.alimentoID, alimento);
-                }
-                else
-                {
-                    Debug.LogWarning($"<color=red>[BaseDeDatosComida]</color> ¡ID duplicado en la base de datos!: " + alimento.alimentoID);
-                }
+                diccionarioComida[alimento.alimentoID] = alimento;
+            }
+            else
+            {
+                Debug.LogWarning($"<color=red>[BaseDeDatosComida]</color> ID duplicado: {alimento.alimentoID}");
             }
         }
-        Debug.Log($"<color=green>[BaseDeDatosComida]</color> Base de datos cargada exitosamente con {diccionarioComida.Count} ítems.");
+
+        Debug.Log($"<color=green>[BaseDeDatosComida]</color> Base de datos cargada con {diccionarioComida.Count} alimentos.");
     }
-    //Cualquier script llama a esta funcion para pedir informacion de un alimento por su ID
+
+    public bool TryGetAlimentoPorID(string alimentoID, out FoodData alimento)
+    {
+        return diccionarioComida.TryGetValue(alimentoID, out alimento);
+    }
+
     public FoodData ObtenerAlimentoPorID(string alimentoID)
     {
         if (diccionarioComida.TryGetValue(alimentoID, out FoodData alimento))
-        {
             return alimento;
-        }
-        else
-        {
-            Debug.LogWarning($"<color=red>[BaseDeDatosComida]</color> ¡Alimento no encontrado en la base de datos! ID: " + alimentoID);
-            return null;
-        }
+
+        Debug.LogWarning($"<color=red>[BaseDeDatosComida]</color> ¡Alimento no encontrado en la base de datos! ID: {alimentoID}");
+        return null;
     }
 }
