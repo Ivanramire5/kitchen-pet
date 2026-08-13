@@ -4056,9 +4056,8 @@ MonoBehaviour:
   prefabCajaReparto: {fileID: 2506061618388183327, guid: cab64ff88a02f5b4f8b6b455d516eb29, type: 3}
   puntoDescarga: {fileID: 1193095280}
   pedidoActual:
-  - ingrPan
-  - ingrSalchicha
-  - ingrMostaza
+  - panchito_id
+  - kebab_id
 --- !u!54 &1059339013
 Rigidbody:
   m_ObjectHideFlags: 0

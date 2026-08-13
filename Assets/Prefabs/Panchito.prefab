@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 6652293131025520322}
   - component: {fileID: 1006277889438280060}
   - component: {fileID: -6873101721212080838}
+  - component: {fileID: -8681351519246636189}
+  - component: {fileID: 8970683524191025495}
   m_Layer: 0
   m_Name: Panchito
   m_TagString: Untagged
@@ -126,3 +128,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IngredienteFisico
   datos: {fileID: 11400000, guid: 1349b2b17524dcc4a8d01dcb04e9ba6c, type: 2}
+--- !u!54 &-8681351519246636189
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790489977334734756}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &8970683524191025495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790489977334734756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff86053a203de540acf04b56afed8e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemFisico
+  distanciaDeFlotacion: 1.5
+  sePuedeLanzar: 1
+  rb: {fileID: 0}
