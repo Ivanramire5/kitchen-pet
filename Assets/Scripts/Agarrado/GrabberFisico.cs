@@ -17,7 +17,11 @@ public class GrabberFisico : MonoBehaviour
     [Header("Fuerzas de Física (Estilo HL2)")]
     public float fuerzaAtraccion = 20f;
     public float amortiguacion = 8f; // Evita que el objeto orbite como un péndulo
-    public float fuerzaLanzamiento = 12f;
+    [SerializeField]
+    public float fuerzaLanzamiento;
+    [SerializeField]
+    public float fuerzaDeObjetoSoltado;
+
     public float distanciaMaximaRuptura = 3f; // Si se traba detrás de un muro y se aleja mucho, se suelta
 
     private ItemFisico itemAgarrado;
