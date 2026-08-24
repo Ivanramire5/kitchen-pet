@@ -4731,6 +4731,7 @@ GameObject:
   - component: {fileID: 1347384325}
   - component: {fileID: 1347384324}
   - component: {fileID: 1347384323}
+  - component: {fileID: 1347384326}
   m_Layer: 0
   m_Name: ComputadoraTienda
   m_TagString: Interactuable
@@ -4788,6 +4789,19 @@ Transform:
   - {fileID: 1188658975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1347384326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347384322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7918e77daa70c049a22747ab5d89332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TerminalTienda
+  panelTiendaUI: {fileID: 1777039680}
 --- !u!1 &1356823187
 GameObject:
   m_ObjectHideFlags: 0
@@ -6065,7 +6079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1777039681
 RectTransform:
   m_ObjectHideFlags: 0
