@@ -1727,7 +1727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
   baseDeDatosComida: []
-  productoPrefab: {fileID: 2682974350061452837, guid: 9df133857a0e930479179d4b07b18657, type: 3}
+  productoPrefab: {fileID: 7205855081799046171, guid: 9df133857a0e930479179d4b07b18657, type: 3}
   contenedorProductos: {fileID: 1671082823}
   camion: {fileID: 1059339012}
   carritoActual: []
