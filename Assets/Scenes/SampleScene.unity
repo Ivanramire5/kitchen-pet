@@ -1345,9 +1345,11 @@ GameObject:
   - component: {fileID: 406861119}
   - component: {fileID: 406861118}
   - component: {fileID: 406861122}
+  - component: {fileID: 406861124}
+  - component: {fileID: 406861123}
   m_Layer: 0
   m_Name: Store
-  m_TagString: Untagged
+  m_TagString: Interactuable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1367,7 +1369,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1439,7 +1441,7 @@ Transform:
   m_GameObject: {fileID: 406861117}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.0768, y: 1.59896, z: -21.385}
+  m_LocalPosition: {x: -7.94, y: 1.59896, z: -21.385}
   m_LocalScale: {x: 1.6392, y: 1, z: 0.41746512}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1461,12 +1463,38 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8905162, y: 2.8865042, z: 6.6331224}
-  m_Center: {x: 0.072903186, y: -0.6093196, z: 2.8165622}
+  m_Size: {x: 1.8905162, y: 3.186573, z: 4.53729}
+  m_Center: {x: 0.072903186, y: -0.45168394, z: 1.7686464}
+--- !u!114 &406861123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406861117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352f917487dd7264baadf6b732e420be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionText
+  textoInteraccion: {fileID: 945696949}
+--- !u!114 &406861124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406861117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7918e77daa70c049a22747ab5d89332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TerminalTienda
+  panelTiendaUI: {fileID: 1671082822}
 --- !u!1 &407609578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1698,6 +1726,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6433cc8c4b1959d48baf63eeac71bd77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
+  baseDeDatosComida: []
+  productoPrefab: {fileID: 2682974350061452837, guid: 9df133857a0e930479179d4b07b18657, type: 3}
+  contenedorProductos: {fileID: 1671082823}
   camion: {fileID: 1059339012}
   carritoActual: []
 --- !u!4 &455365465
