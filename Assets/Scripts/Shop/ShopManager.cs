@@ -36,10 +36,9 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void AgregarAlCarrito(FoodData alimentoAgregado)
     {
-        // TAREA PARA VOS:
-        // 1. Agregá el 'alimentoAgregado' a la lista 'carritoActual' usando .Add()
-        // 2. (Opcional) Sumá el precio del alimento a un contador de precio total
-        // 3. Meté un Debug.Log que diga "Agregaste un [nombre del alimento]" para probarlo
+        carritoActual.Add(alimentoAgregado);
+
+        Debug.Log($"Se agregó {alimentoAgregado.alimentoName} al carrito. Ahora hay {carritoActual.Count} ítems en el carrito.");
     }
 
     /// <summary>
@@ -49,13 +48,31 @@ public class ShopManager : MonoBehaviour
     {
         // TAREA PARA VOS:
         // 1. Primero, hacé un 'if' para verificar que la lista 'carritoActual' no esté vacía (Count > 0). ¡No queremos llamar al camión por nada!
-        
+        if (carritoActual.Count == 0)
+        {
+            Debug.Log("El carrito está vacío. No se puede confirmar la compra.");
+            return;
+        }
         // 2. EXTRAER LOS IDs: 
-        // Acordate que tu función camion.CargarPedido() probablemente pida una List<string> (los IDs), pero tu carrito es de tipo List<FoodData>.
-        // Vas a tener que crear una List<string> temporal acá adentro, hacer un foreach que recorra 'carritoActual', y meter los IDs en esa lista de strings.
+        List<string> idsParaElCamion = new List<string>();
 
-        // 3. Llamá a tu camión: camion.CargarPedido(listaDeStrings);
-        
-        // 4. Vaciá el carrito actual con carritoActual.Clear() para dejar la terminal lista para el próximo cliente.
+        //Recorremos cada alimento en el carrito y extraemos su ID
+        foreach(FoodData alimento in carritoActual)
+        {
+            idsParaElCamion.Add(alimento.alimentoID);
+        }
+
+        if (camion == null)
+        {
+            Debug.LogError("[SHOP] No hay referencia al TruckMovement en el ShopManager.");
+            return;
+        }
+
+        camion.CargarPedido(idsParaElCamion);
+        Debug.Log("Pedido enviado al camion con " + idsParaElCamion.Count + " ítems.");
+
+        // 3. Limpiar el carrito después de confirmar la compra
+        carritoActual.Clear();
+        Debug.Log("Carrito limpiado después de la compra.");
     }
 }

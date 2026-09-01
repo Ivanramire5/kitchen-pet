@@ -45,6 +45,18 @@ public class TruckMovement : MonoBehaviour
         "kebab_id",
     };
 
+    public void CargarPedido(List<string> idsPedido)
+    {
+        if (idsPedido == null)
+        {
+            Debug.LogWarning("[TRUCK] El pedido recibido es nulo.");
+            pedidoActual.Clear();
+            return;
+        }
+
+        pedidoActual = new List<string>(idsPedido);
+        Debug.Log("[TRUCK] Pedido cargado con " + pedidoActual.Count + " elementos.");
+    }
 
     void Update()
     {
