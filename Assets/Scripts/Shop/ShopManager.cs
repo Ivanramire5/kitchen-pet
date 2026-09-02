@@ -28,6 +28,8 @@ public class ShopManager : MonoBehaviour
     //public TextMeshProUGUI textoPrecioTotal;
     //private float precioTotal = 0f;
 
+    
+
     private void Awake()
     {
         // Configuramos el Singleton al arrancar el juego
