@@ -15,36 +15,23 @@ public class CajaReparto : MonoBehaviour
         }
     }
 
-    public void CargarPedido(List<string> idsPedido)
+    public void CargarPedido(List<FoodData> alimentosPedido)
     {
         contenidoCaja.Clear();
 
-        if (idsPedido == null)
+        if (alimentosPedido == null)
         {
-            Debug.LogWarning("[CAJA] La lista de IDs es nula.");
+            Debug.LogWarning("[CAJA] La lista de alimentos es nula.");
             return;
         }
 
-        if (BaseDeDatosComida.Instance == null)
+        foreach (FoodData alimento in alimentosPedido)
         {
-            Debug.LogError("[CAJA] No hay BaseDeDatosComida en la escena.");
-            return;
-        }
-
-        foreach (string idItem in idsPedido)
-        {
-            if (string.IsNullOrEmpty(idItem))
+            if (alimento == null)
                 continue;
 
-            if (BaseDeDatosComida.Instance.TryGetAlimentoPorID(idItem, out FoodData alimento))
-            {
-                contenidoCaja.Add(alimento);
-                Debug.Log("[CAJA] Encontrado: " + alimento.alimentoName + " | ID: " + alimento.alimentoID);
-            }
-            else
-            {
-                Debug.LogWarning("[CAJA] No se encontró el alimento con ID: " + idItem);
-            }
+            contenidoCaja.Add(alimento);
+            Debug.Log("[CAJA] Encontrado: " + alimento.alimentoName + " | ID: " + alimento.alimentoID);
         }
     }
 

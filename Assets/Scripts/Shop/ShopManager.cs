@@ -98,54 +98,34 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void ConfirmarCompra()
     {
-        // 1. Verificar que el carrito no esté vacío
         if (carritoActual.Count == 0)
         {
-            Debug.Log("El carrito está vacío. No se puede confirmar la compra.");
+            Debug.LogWarning("El carrito está vacío.");
             return;
         }
 
-        // --- NUEVO: VERIFICAR SI LA PLATA ALCANZA ---
         if (dineroJugador < costoTotalCarrito)
         {
-            Debug.LogWarning("No tenés suficiente dinero para pagar esto.");
-            return; // Cortamos la función acá, la compra se cancela y el camión no se mueve.
+            Debug.LogWarning("No tenés suficiente dinero.");
+            return; 
         }
 
-        // Si el código llega a esta línea, significa que hay dinero. ¡Cobramos!
+        // Cobramos
         dineroJugador -= costoTotalCarrito;
-        // -------------------------------------------
 
-        // 2. EXTRAER LOS IDs: 
-        List<string> idsParaElCamion = new List<string>();
+        List<FoodData> alimentosParaElCamion = new List<FoodData>(carritoActual);
 
-        // Recorremos cada alimento en el carrito y extraemos su ID
-        foreach(FoodData alimento in carritoActual)
+        if (camion != null)
         {
-            idsParaElCamion.Add(alimento.alimentoID);
+            camion.CargarPedido(alimentosParaElCamion);
+            Debug.Log($"El camión arrancó con {alimentosParaElCamion.Count} paquetes.");
         }
+        // ------------------------------------------------------------------
 
-        // Verificamos que el camión esté asignado en el Inspector
-        if (camion == null)
-        {
-            Debug.LogError("[SHOP] No hay referencia al TruckMovement en el ShopManager.");
-            return;
-        }
-
-        // Enviamos la lista de IDs al camión
-        camion.CargarPedido(idsParaElCamion);
-        Debug.Log("Pedido enviado al camión con " + idsParaElCamion.Count + " ítems.");
-
-        // 3. Limpiar el carrito después de confirmar la compra
         carritoActual.Clear();
-
-        // --- NUEVO: RESETEAR EL COSTO A CERO Y REFRESCAR PANTALLA ---
         costoTotalCarrito = 0f;
         ActualizarTextosUI(); 
-
-        Debug.Log("Carrito limpiado después de la compra.");
     }
-
     // --- NUEVO: FUNCIÓN PARA MANEJAR LA UI ---
     /// <summary>
     /// Actualiza los números en los textos de tu interfaz (Canvas).

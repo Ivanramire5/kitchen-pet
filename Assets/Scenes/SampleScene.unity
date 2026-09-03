@@ -1495,6 +1495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerminalTienda
   panelTiendaUI: {fileID: 1671082822}
+  scriptCamaraJugador: {fileID: 330585547}
 --- !u!1 &407609578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,7 +1878,7 @@ GameObject:
   - component: {fileID: 502674358}
   - component: {fileID: 502674357}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3488,7 +3489,7 @@ GameObject:
   - component: {fileID: 867870500}
   - component: {fileID: 867870499}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ComprarText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4863,13 +4864,12 @@ MonoBehaviour:
   AlTerminarEntrega:
     m_PersistentCalls:
       m_Calls: []
-  temporizadorEntrega: 0
   prefabCajaReparto: {fileID: 2506061618388183327, guid: cab64ff88a02f5b4f8b6b455d516eb29, type: 3}
   puntoDescarga: {fileID: 1193095280}
   pedidoActual:
-  - ingrPan
-  - ingrSalchicha
-  - ingrMostaza
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!54 &1059339013
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7136,7 +7136,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 724.8666, y: 455}
+  m_AnchoredPosition: {x: 158, y: 455}
   m_SizeDelta: {x: 366.3469, y: 101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1868112361

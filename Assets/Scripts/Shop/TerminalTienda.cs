@@ -6,6 +6,10 @@ public class TerminalTienda : MonoBehaviour
     // Arrastrá acá el GameObject de tu Canvas principal (o el Panel general)
     public GameObject panelTiendaUI;
 
+    [Header("Control del Jugador")]
+    [Tooltip("Arrastrá acá el script que controla el movimiento de la cámara (ej: FirstPersonController, MouseLook, etc)")]
+    public MonoBehaviour scriptCamaraJugador;
+
     [Header("Estado")]
     // Para saber si la tienda está abierta o no
     private bool tiendaAbierta = false;
@@ -23,10 +27,12 @@ public class TerminalTienda : MonoBehaviour
 
     void Update()
     {
+        
         if (jugadorCerca && Input.GetKeyDown(KeyCode.E))
         {
             AlternarTienda();
         }
+        
     }
 
     // Usamos los Triggers (Colisionadores invisibles) para detectar al jugador
@@ -55,18 +61,21 @@ public class TerminalTienda : MonoBehaviour
 
     private void AlternarTienda()
     {
-        // 1. Invertimos el estado (si estaba true pasa a false, y viceversa)
         tiendaAbierta = !tiendaAbierta;
 
-        // 2. Prendemos o apagamos el Canvas visualmente
         if (panelTiendaUI != null)
         {
             panelTiendaUI.SetActive(tiendaAbierta);
         }
 
-        // 3. ¡EL DETALLE CLAVE DEL MOUSE!
-        // Mientras la tienda está abierta, el cursor queda visible y desbloqueado.
         Cursor.visible = tiendaAbierta;
         Cursor.lockState = tiendaAbierta ? CursorLockMode.None : CursorLockMode.Locked;
+
+        // --- NUEVO: Apagamos o prendemos el script de la cámara ---
+        if (scriptCamaraJugador != null)
+        {
+            // Si la tienda está abierta (true), desactivamos la cámara (false). Por eso usamos el "!" (negación).
+            scriptCamaraJugador.enabled = !tiendaAbierta;
+        }
     }
 }
