@@ -1729,6 +1729,8 @@ MonoBehaviour:
   baseDeDatosComida:
   - {fileID: 11400000, guid: b979a5b982f245e48a9ea75c5eaaf1d2, type: 2}
   - {fileID: 11400000, guid: 1349b2b17524dcc4a8d01dcb04e9ba6c, type: 2}
+  - {fileID: 11400000, guid: 53541241687102d4e91912d2a03c1e71, type: 2}
+  - {fileID: 11400000, guid: 4dcc3369b2b3e7647a1f0431e1ad77bd, type: 2}
   productoPrefab: {fileID: 7205855081799046171, guid: 9df133857a0e930479179d4b07b18657, type: 3}
   contenedorProductos: {fileID: 640414249}
   camion: {fileID: 1059339012}
@@ -2718,7 +2720,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.618225, y: -73.1983}
+  m_AnchoredPosition: {x: -7.618164, y: -73.198364}
   m_SizeDelta: {x: -101.5752, y: -284.4223}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &640414250
@@ -2742,7 +2744,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 150, y: 150}
-  m_Spacing: {x: 20, y: 20}
+  m_Spacing: {x: 222, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &640414251
