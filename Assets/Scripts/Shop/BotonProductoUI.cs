@@ -14,24 +14,29 @@ public class BotonProductoUI : MonoBehaviour
     // Acá el botón va a guardar la memoria de quién es
     private FoodData miAlimento; 
 
-    // --- FUNCIONES QUE VAS A PROGRAMAR ---
-
     /// <summary>
     /// Esta función será llamada desde afuera por el ShopManager al crear el botón.
     /// </summary>
     public void ConfigurarBoton(FoodData datosRecibidos)
     {
-        // 1. Guardar 'datosRecibidos'
+        // 1. Guardar 'datosRecibidos' en la memoria del botón
         miAlimento = datosRecibidos;
         
-        // 2. Cambiar el .text de 'textoNombre' por el nombre del alimento
-        textoNombre.text = miAlimento.alimentoName;
+        // 2. Cambiar los textos y la imagen de forma SEGURA (con salvavidas)
+        if (textoNombre != null) 
+        {
+            textoNombre.text = miAlimento.alimentoName;
+        }
+
+        if (textoPrecio != null) 
+        {
+            textoPrecio.text = "$" + miAlimento.precioCompra.ToString("F2");
+        }
         
-        // 3. Cambiar el .text de 'textoPrecio' por el precio del alimento (convertido a string)
-        textoPrecio.text = "$" + miAlimento.precioCompra.ToString();
-        
-        // 4. Cambiar el .sprite de 'iconoVisual' por el icono del alimento
-        iconoVisual.sprite = miAlimento.iconoUI;
+        if (iconoVisual != null) 
+        {
+            iconoVisual.sprite = miAlimento.iconoUI;
+        }
     }
 
     /// <summary>
@@ -39,8 +44,14 @@ public class BotonProductoUI : MonoBehaviour
     /// </summary>
     public void AlPresionarBoton()
     {
-        
-        Debug.Log("¡Hiciste clic en el producto!");
+        // Un salvavidas final por si el botón perdió la memoria
+        if (miAlimento == null)
+        {
+            Debug.LogError("¡Error! Este botón está vacío y no sabe qué alimento es. Revisá tu Prefab.");
+            return;
+        }
+
+        Debug.Log($"¡Hiciste clic en {miAlimento.alimentoName}!");
         ShopManager.Instancia.AgregarAlCarrito(miAlimento);
     }
 }
