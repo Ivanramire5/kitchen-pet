@@ -19,6 +19,7 @@ public class FirstPersonCamera : MonoBehaviour
 
     void Update()
     {
+        if (Cursor.visible) return;
         // 1. Capturar el movimiento del mouse (multiplicado por Time.deltaTime para que sea independiente de los FPS)
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -32,5 +33,6 @@ public class FirstPersonCamera : MonoBehaviour
 
         // 4. Rotar el cuerpo del jugador horizontalmente (eje Y del mundo)
         playerBody.Rotate(Vector3.up * mouseX);
+        
     }
 }
