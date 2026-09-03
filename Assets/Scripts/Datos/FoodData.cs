@@ -22,11 +22,11 @@ public class FoodData : ScriptableObject
     [Header("Economía (Configurable en Inspector)")]
     [Tooltip("Cuánto le cuesta al jugador comprar este ingrediente")]
     [Min(0)] 
-    public int precioCompra;
+    public float precioCompra;
 
     [Tooltip("Cuánto oro da este ingrediente al ser vendido o entregado")]
     [Min(0)]
-    public int precioVenta;
+    public float precioVenta;
 
     [Tooltip("Ganancia de experiencia o puntaje al procesar este ítem")]
     [Range(0, 100)] 
