@@ -8,10 +8,10 @@ public class ShopManager : MonoBehaviour
     public static ShopManager Instancia;
 
     [Header("Generación de Catálogo")]
-    // 1. Acá vas a meter todos los alimentos que existan en el juego
+    //Acá vas a meter todos los alimentos que existan en el juego
     public List<FoodData> baseDeDatosComida;
     
-    // 2. El Prefab azul (el molde de la tarjeta)
+    //El Prefab azul (el molde de la tarjeta)
     public GameObject productoPrefab;        
     
     // 3. El Panel de la UI que tiene el Grid Layout Group
@@ -23,17 +23,19 @@ public class ShopManager : MonoBehaviour
 
     // --- NUEVO: SECCIÓN DE ECONOMÍA Y UI ---
     [Header("Economía y UI")]
-    public float dineroJugador = 100f; // Dinero con el que empezás a jugar
+    public float dineroJugador = 100f; 
     [SerializeField]
-    public TextMeshProUGUI textoDineroJugador; // El texto de tu Canvas que mostrará tu plata
+    public TextMeshProUGUI textoDineroJugador; 
     [SerializeField]
-    public TextMeshProUGUI textoTotalCarrito;  // El texto de tu Canvas que mostrará cuánto cuesta lo que llevás
+    public TextMeshProUGUI textoTotalCarrito;  
+    [Tooltip("El texto que va adentro de tu panel dineroStore")]
+    public TextMeshProUGUI textoDineroStore;
 
     [Header("Datos del Carrito")]
     // La lista temporal donde se van acumulando los ítems
     public List<FoodData> carritoActual = new List<FoodData>();
     
-    // --- NUEVO: VARIABLE PARA EL TOTAL A PAGAR ---
+
     private float costoTotalCarrito = 0f;
 
     private void Awake()
@@ -142,6 +144,7 @@ public class ShopManager : MonoBehaviour
         if (textoTotalCarrito != null)
         {
             textoTotalCarrito.text = "A Pagar: $" + costoTotalCarrito.ToString("F2");
+            textoDineroStore.text = "$" + dineroJugador.ToString("F2");
         }
     }
 }

@@ -6,6 +6,9 @@ public class TerminalTienda : MonoBehaviour
     // Arrastrá acá el GameObject de tu Canvas principal (o el Panel general)
     public GameObject panelTiendaUI;
 
+    [Tooltip("Arrastrá acá el objeto padre que contiene la Billetera y el A Pagar del exterior")]
+    public GameObject hudExterior;
+
     [Header("Control del Jugador")]
     [Tooltip("Arrastrá acá el script que controla el movimiento de la cámara (ej: FirstPersonController, MouseLook, etc)")]
     public MonoBehaviour scriptCamaraJugador;
@@ -15,6 +18,8 @@ public class TerminalTienda : MonoBehaviour
     private bool tiendaAbierta = false;
     // Para saber si el jugador está lo suficientemente cerca
     private bool jugadorCerca = false;
+
+    
 
     void Start()
     {
@@ -76,6 +81,10 @@ public class TerminalTienda : MonoBehaviour
         {
             // Si la tienda está abierta (true), desactivamos la cámara (false). Por eso usamos el "!" (negación).
             scriptCamaraJugador.enabled = !tiendaAbierta;
+        }
+        if (hudExterior != null)
+        {
+            hudExterior.SetActive(!tiendaAbierta);
         }
     }
 }
